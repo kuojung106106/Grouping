@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分組小程式</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .group-btn {
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .input-field {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>分組小程式</h1>
+    <input type="text" id="username" class="input-field" placeholder="請輸入姓名">
+    <button id="groupBtn" class="group-btn" onclick="assignGroup()">點我分組</button>
+    <div id="result" class="result"></div>
+</div>
+
+<script>
+    const groupLimits = {
+        "A": 2,
+        "B": 2,
+        "C": 3,
+        "D": 3
+    };
+    const groups = { "A": [], "B": [], "C": [], "D": [] };
+    let userCount = 0;
+
+    function assignGroup() {
+        const username = document.getElementById("username").value.trim();
+
+        if (!username) {
+            document.getElementById("result").innerText = "請先輸入您的姓名！";
+            return;
+        }
+
+        if (userCount >= 10) {
+            document.getElementById("result").innerText = "所有使用者都已分組完成！";
+            return;
+        }
+
+        const availableGroups = Object.keys(groupLimits).filter(group => groups[group].length < groupLimits[group]);
+
+        if (availableGroups.length === 0) {
+            document.getElementById("result").innerText = "已無可分配的隊伍名額！";
+            return;
+        }
+
+        const randomGroup = availableGroups[Math.floor(Math.random() * availableGroups.length)];
+        groups[randomGroup].push(username);
+        
+        document.getElementById("result").innerText = `${username} 已被分配到 ${randomGroup} 隊！`;
+        document.getElementById("username").value = '';  // 清空姓名欄位
+        userCount++;
+    }
+</script>
+
+</body>
+</html>
